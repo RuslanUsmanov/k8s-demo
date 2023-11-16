@@ -1,0 +1,23 @@
+apiVersion: apps/v1       # Версия API Kubernetes для этого манифеста
+kind: Deployment          # Тип объекта, который будет создан этим манифестом
+metadata:
+  name: k8s-demo
+  labels:
+    app: k8s-demo
+spec:                     # Описываем характеристики deplyment'а
+  replicas: 2             # Количество реплик подов
+  selector:               # Указываем селектор для пода
+    matchLabels:
+      app: k8s-demo-pod
+  template:               # Описываем параметры пода
+    metadata:
+      labels:
+        app: k8s-demo-pod
+    spec:
+      containers:         # Описываем контейнер
+      - name: k8s-demo-container
+        image: justaway86/k8s-demo:1.0
+        ports:
+        - containerPort: 80
+        # Указываем команду, которую необходимо выполнить при запуске контейнера
+        command: ["uvicorn", "--host", "0.0.0.0", "--port", "80", "main:app"]
